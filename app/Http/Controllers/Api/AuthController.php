@@ -11,24 +11,30 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function register(Request $request){
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
 
+        $fields = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string|unique:users,email',
+            'password' => 'required|string|confirmed'
+        ]);
+        $user = new User();
+        $user->name = $fields['name'];
+        $user->email = $fields['email'];
+        $user->password = Hash::make($fields['password']);
         $user->save();
-        $token = $user->createToken('admin');
+
+        $token = $user->createToken('authtoken')->plainTextToken;
         return response()->json([
             'status' => 200,
             'message' => 'Successfully registered',
-            'token' => $token->plainTextToken
+            'token' => $token
         ]);
     }
 
     public function login(Request $request) {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
-            $token = $user->createToken('admin');
+            $token = $user->createToken('authtoken');
             return response()->json([
                 'status' => 200,
                 'message' => 'Successfully login',
@@ -40,4 +46,12 @@ class AuthController extends Controller
     public function profile(Request $request) {
         return 'success';
     } 
+
+    public function logout(Request $request) {
+        auth()->user()->tokens()->delete();
+
+        return [
+            'message' => 'Logged out',
+        ];
+    }
 }
