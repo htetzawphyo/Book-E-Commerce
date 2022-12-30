@@ -84,9 +84,9 @@ export default {
 		const authorStore = useAuthorStore();
 		const { getAuthors } = storeToRefs(authorStore);
 
-		watch(searchData, 	debounce(() => {
+		watch(searchData, debounce(() => {
 			authorStore.search(searchData.value);
-		},1000))
+		},800))
 		
 		function handleSearch() {
 			authorStore.search(searchData.value);

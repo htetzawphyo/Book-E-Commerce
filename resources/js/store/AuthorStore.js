@@ -1,25 +1,28 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import app from "../App.vue";
+import { getCurrentInstance } from "vue";
 
 export const useAuthorStore = defineStore('authorStore', () => {
+
+	const internalInstance = getCurrentInstance();
 	// state
 	const authors = ref([])
 
 	// getters
 	const getAuthors = computed( () => {
+		internalInstance.appContext.config.globalProperties.$Progress.finish();
 		return authors.value.data
 	})
-
+	
 	// actions
 	function getAuthor() {
+		internalInstance.appContext.config.globalProperties.$Progress.start();
 		axios.get(`http://127.0.0.1:8000/api/authors`)
 		.then( res => {
 			let resAuthors = res.data
-			authors.value = resAuthors   
-		})
-		.catch( err => {
-			console.log(err.message)
+			authors.value = resAuthors  
 		})
 	}
 

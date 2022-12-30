@@ -23,8 +23,9 @@ class AuthorController extends Controller
         }
 
         $authors = $query->paginate(10);
-     
+
         return AuthorsResource::collection($authors)->additional(['message' => 'success']);
+     
     }
 
     public function store(AuthorCreateRequest $request) {
