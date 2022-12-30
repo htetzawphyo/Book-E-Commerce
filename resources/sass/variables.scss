@@ -1,0 +1,21 @@
+// Body
+$body-bg: #D4E8FF;
+$dark: #303030;
+
+// Border
+$border-radius:               0.2em;
+$border-radius-sm:            0.2em;
+$border-radius-lg:            0.2em;
+$border-radius-pill:          0.2rem;
+
+// List Group
+$list-group-color:                  white;
+$list-group-bg:                     $dark;
+
+$list-group-hover-bg:               #424040;
+$list-group-action-hover-color:      white;
+$list-group-action-active-bg:       #424040;
+
+$list-group-disabled-color:         rgb(175, 169, 169);
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
