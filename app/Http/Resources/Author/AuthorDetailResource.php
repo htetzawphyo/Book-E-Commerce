@@ -18,7 +18,7 @@ class AuthorDetailResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'image_path' => $this->image ? asset('storage/app/media/' . $this->image) : null
+            'image_path' => $this->image ? asset('storage/media/' . $this->image) : null
         ];
     }
 }

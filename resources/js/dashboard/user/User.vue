@@ -21,9 +21,9 @@
   </template>
   
   <script>
-  import MainBody from '../components/MainBody.vue'
-  import SideBar from '../components/SideBar.vue'
-  import DashboardNavBar from '../components/DashboardNavBar.vue'
+  import MainBody from '../../components/MainBody.vue'
+  import SideBar from '../../components/SideBar.vue'
+  import DashboardNavBar from '../../components/DashboardNavBar.vue'
   export default {
   components: {
     MainBody,

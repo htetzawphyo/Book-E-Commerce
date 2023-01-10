@@ -22,7 +22,7 @@ class AuthorController extends Controller
             $query->where('name', 'like', '%'. $request->search .'%');
         }
 
-        $authors = $query->paginate(10);
+        $authors = $query->paginate(2);
 
         return AuthorsResource::collection($authors)->additional(['message' => 'success']);
      
@@ -61,6 +61,8 @@ class AuthorController extends Controller
     }
 
     public function destroy(Author $author) {
+        $image = $author->image;
+        Storage::delete('media/'.$image);
         $author->delete();
 
         return ResponseHelper::success([], 'Successfully deleted.');

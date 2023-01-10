@@ -2,7 +2,7 @@
     <div class="container-fluid">
             <div class="row g-2">
 
-                <nav class="py-3">
+                <nav class="sticky-top">
                     <!-- Navbar -->
                     <DashboardNavBar></DashboardNavBar>				
                 </nav>
@@ -20,8 +20,7 @@
                                 <router-link :to="{name: 'author'}" class="btn btn-dark"><i class="fa-solid fa-angles-left me-2"></i>Back</router-link>
                             </div>
                         </div>
-                    </div>
-                    
+                    </div>                    
 
                     <!-- CREATE FORM -->
                     <form @submit.prevent="handleAuthor">                        
@@ -34,7 +33,7 @@
                                 <label>Description</label>
                                 <textarea class="form-control border-dark" cols="30" rows="8" v-model="description"></textarea>
                             </div>
-                            <div class="mb-3" @click="selectingImg">
+                            <div class="mb-3">
                                 <label for="formFile" class="form-label border-dark">Image</label>
                                 <input class="form-control border-dark" type="file" v-on:change="handleFileUpload" ref="image" id="image">
                             </div>
@@ -53,10 +52,10 @@
 </template>
 
 <script>
-import SideBar from '../components/SideBar.vue'
-import DashboardNavBar from '../components/DashboardNavBar.vue'
+import SideBar from '../../components/SideBar.vue'
+import DashboardNavBar from '../../components/DashboardNavBar.vue'
 import { ref } from '@vue/reactivity'
-import { useAuthorStore } from '../store/AuthorStore'
+import { useAuthorStore } from '../../store/AuthorStore'
 
 export default {
     components: { 

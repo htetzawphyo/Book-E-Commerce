@@ -1,5 +1,5 @@
 <template>
-    <div class="list-group text-center text-lg-start">
+    <div class="list-group text-center text-lg-start ">
         <span class="list-group-item disabled d-none d-lg-block">
             <small>CONTROLS</small>
         </span> 
@@ -32,5 +32,9 @@ export default {
     .router-link-active {
         border-left: 3px solid red;
         background-color: #424040;
+    }
+
+    .position {
+        position: fixed;
     }
 </style>

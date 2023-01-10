@@ -2,7 +2,7 @@
   <div class="container-fluid">
 		  <div class="row g-2">
 
-			  <nav class="py-3">
+			  <nav class="sticky-top">
 				  <!-- Navbar -->
 				  <DashboardNavBar></DashboardNavBar>				
 			  </nav>
