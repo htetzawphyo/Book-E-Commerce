@@ -22,7 +22,7 @@ class AuthorController extends Controller
             $query->where('name', 'like', '%'. $request->search .'%');
         }
 
-        $authors = $query->paginate(2);
+        $authors = $query->paginate(10);
 
         return AuthorsResource::collection($authors)->additional(['message' => 'success']);
      

@@ -26,16 +26,24 @@
                     <form @submit.prevent="handleAuthor">                        
                         <div class="card-body">
                             <div class="mb-3">
-                                <label>Name</label>
-                                <input type="text" class="form-control border-dark" placeholder="Name" v-model="name">
+                                <label class="text-bold">Name</label>
+                                <input type="text" class="form-control" placeholder="Name" v-model="name" 
+                                    :class="{'is-invalid': getErrMsg.name, 'border-danger': getErrMsg.name, 'border-dark': !getErrMsg.name}">
+                                    <span v-if="getErrMsg.name" class="text-danger fst-italic">{{ getErrMsg.name[0] }}</span>
                             </div>
                             <div class="mb-3">
-                                <label>Description</label>
-                                <textarea class="form-control border-dark" cols="30" rows="8" v-model="description"></textarea>
+                                <label class="text-bold">Description</label>
+                                <textarea class="form-control" cols="30" rows="8" v-model="description"
+                                :class="{'is-invalid': getErrMsg.description, 'border-danger': getErrMsg.description, 'border-dark': !getErrMsg.description}"
+                                ></textarea>
+                                <span v-if="getErrMsg.description" class="text-danger fst-italic">{{ getErrMsg.description[0] }}</span>
                             </div>
                             <div class="mb-3">
-                                <label for="formFile" class="form-label border-dark">Image</label>
-                                <input class="form-control border-dark" type="file" v-on:change="handleFileUpload" ref="image" id="image">
+                                <label for="formFile" class="form-label border-dark text-bold">Image</label>
+                                <input class="form-control" type="file" v-on:change="handleFileUpload" ref="image" id="image"
+                                :class="{'is-invalid': getErrMsg.image, 'border-danger': getErrMsg.image, 'border-dark': !getErrMsg.image}"
+                                >
+                                <span v-if="getErrMsg.image" class="text-danger fst-italic">{{ getErrMsg.image[0] }}</span>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -56,6 +64,7 @@ import SideBar from '../../components/SideBar.vue'
 import DashboardNavBar from '../../components/DashboardNavBar.vue'
 import { ref } from '@vue/reactivity'
 import { useAuthorStore } from '../../store/AuthorStore'
+import { storeToRefs } from 'pinia'
 
 export default {
     components: { 
@@ -68,6 +77,7 @@ export default {
         const image = ref(null);
 
         const authorStore = useAuthorStore();
+        const { getErrMsg } = storeToRefs(authorStore);
 
         let handleFileUpload = (event) => {
             image.value = event.target.files[0];
@@ -81,12 +91,9 @@ export default {
             }
 
             authorStore.addAuthor(author);
-            name.value = "";
-            description.value = "";
-            image.value = null;
         }
         
-        return { name, description,image, handleFileUpload , handleAuthor}
+        return { name, description,image, handleFileUpload , handleAuthor, getErrMsg}
     }
 }
 </script>

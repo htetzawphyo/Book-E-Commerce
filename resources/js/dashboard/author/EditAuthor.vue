@@ -29,11 +29,17 @@
                         <div class="card-body" v-if="getAuthors">
                             <div class="mb-3">
                                 <label>Name</label>
-                                <input type="text" class="form-control border-dark" placeholder="Name"  v-model="getAuthors.name" required>
+                                <input type="text" class="form-control" placeholder="Name"  v-model="getAuthors.name"
+                                :class="{'is-invalid': getErrMsg.name, 'border-danger': getErrMsg.name, 'border-dark': !getErrMsg.name}"
+                                >
+                                <span v-if="getErrMsg.name" class="text-danger fst-italic">{{ getErrMsg.name[0] }}</span>
                             </div>
                             <div class="mb-3">
                                 <label>Description</label>
-                                <textarea class="form-control border-dark" cols="30" rows="8" v-model="getAuthors.description" required></textarea>
+                                <textarea class="form-control" cols="30" rows="8" v-model="getAuthors.description"
+                                :class="{'is-invalid': getErrMsg.description, 'border-danger': getErrMsg.description, 'border-dark': !getErrMsg.description}"
+                                ></textarea>
+                                <span v-if="getErrMsg.description" class="text-danger fst-italic">{{ getErrMsg.description[0] }}</span>
                             </div>
                             <div>
                                 <img :src="getAuthors.image_path" alt="" class="img-thumbnail my-2" style="width:200px">
@@ -62,8 +68,7 @@ import DashboardNavBar from '../../components/DashboardNavBar.vue'
 import { useAuthorStore } from '../../store/AuthorStore';
 import { storeToRefs } from 'pinia';
 import { ref } from '@vue/reactivity';
-import axios from "axios";
-import { useRouter } from 'vue-router';
+
 export default {
     components: { 
         SideBar,
@@ -74,8 +79,7 @@ export default {
         const id = props.id;
         const authorStore = useAuthorStore();
         authorStore.editAuthor(props.id);
-        const { getAuthors, updateAuthor } = storeToRefs(authorStore);
-        const router = useRouter();
+        const { getAuthors, updateAuthor, getErrMsg } = storeToRefs(authorStore);
 
         const image = ref(null);
         let handleFileUpload = (event) => {
@@ -92,23 +96,10 @@ export default {
                 formData.append("image", image.value)
             }
 
-            // updateAuthor(id, formData)
-            axios.post(`http://127.0.0.1:8000/api/authors/${props.id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            .then(response => {
-                router.push({name: 'author'})
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
+            authorStore.updateAuthor(id, formData)
         }     
 
-        return { getAuthors , handleAuthor, handleFileUpload}
+        return { getAuthors , handleAuthor, handleFileUpload, getErrMsg}
     }
 }
 </script>

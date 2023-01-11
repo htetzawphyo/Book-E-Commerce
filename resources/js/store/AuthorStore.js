@@ -13,7 +13,7 @@ export const useAuthorStore = defineStore('authorStore', () => {
 
 	// state
 	let authors = ref([])
-	let page = 1
+	let errMsg = ref([])
 	let total = ref(null);
 	let indexId = [];
 	let currentPage = null;
@@ -26,10 +26,13 @@ export const useAuthorStore = defineStore('authorStore', () => {
 	const totalItem = computed( () => {
 		return indexId
 	})
+	// for error
+	const getErrMsg = computed( () => {
+		return errMsg.value
+	})
 	
 	// actions
 	function next(search, page = currentPage) {
-		console.log('search: '+ search, ' | ', 'page: '+page)
 		if(page >= 1 && page < total){
 			++page;
 			getAuthor(search,page)
@@ -51,7 +54,6 @@ export const useAuthorStore = defineStore('authorStore', () => {
 	}
 	
 	function getAuthor(search = '', page = 1) {
-		console.log(search, page)
 		internalInstance.appContext.config.globalProperties.$Progress.start();
 		axios.get(`http://127.0.0.1:8000/api/authors?search=${search}&page=${page}`)
 		.then( res => {
@@ -81,7 +83,7 @@ export const useAuthorStore = defineStore('authorStore', () => {
 			let resAuthors = res.data
 			authors.value = resAuthors
 		})
-	}	
+	}
 
 	function addAuthor(author) {
 		axios.post(`http://127.0.0.1:8000/api/authors`, author,{
@@ -91,10 +93,9 @@ export const useAuthorStore = defineStore('authorStore', () => {
 		})
 		.then( res => {
 			router.push({ name: 'author'})
-			console.log('success')
 		})
 		.catch( err => {
-			console.log("Err: ", err.response.data)
+			errMsg.value = err.response.data.errors;
 		})
 	}
 
@@ -105,10 +106,10 @@ export const useAuthorStore = defineStore('authorStore', () => {
 			}
 		})
 		.then(response => {
-			console.log(response.data);
+			router.push({name: 'author'})
 		})
 		.catch(error => {
-			console.log(error);
+			errMsg.value = error.response.data.errors;
 		});
 	}
 
@@ -123,24 +124,5 @@ export const useAuthorStore = defineStore('authorStore', () => {
 		})
 	}
 
-	return { getAuthors, getAuthor, addAuthor, editAuthor, updateAuthor, deleteAuthor, next, prev, totalItem, first, last }
+	return { getAuthors, getErrMsg, totalItem, getAuthor, addAuthor, editAuthor, updateAuthor, deleteAuthor, next, prev, first, last }
 })
-
-// function search(search, page = 1) {
-// 	axios.get(`http://127.0.0.1:8000/api/authors/?search=${search}&page=${page}`)
-// 	.then( res => {
-// 		let resAuthors = res.data
-// 		authors.value = resAuthors   
-// 		total = res.data.meta.last_page
-// 		currentPage = res.data.meta.current_page
-		
-// 		let from = res.data.meta.from
-// 		let to = res.data.meta.from + res.data.meta.per_page
-// 		indexId.splice(0, to);
-// 		for(let i = from; i < to ; i++){
-// 			indexId.push(i);
-// 		}
-// 		console.log(res.data.meta)
-// 		console.log(total)
-// 	})
-// }
