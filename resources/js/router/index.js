@@ -7,8 +7,26 @@ import Book from '../dashboard/book/Book.vue'
 import AddBook from '../dashboard/book/AddBook.vue'
 import EditBook from '../dashboard/book/EditBook.vue'
 import User from '../dashboard/user/User.vue'
+import Register from '../auth/Register.vue'
+import Login from '../auth/Login.vue'
+import Home from '../front/Home.vue'
 
 const routes = [
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login 
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: Home
+  },
   {
     path: '/admin',
     name: 'admin',

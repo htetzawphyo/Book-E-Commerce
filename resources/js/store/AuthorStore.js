@@ -17,6 +17,7 @@ export const useAuthorStore = defineStore('authorStore', () => {
 	let total = ref(null);
 	let indexId = [];
 	let currentPage = null;
+	let meta = ref([]);
 
 	// <===== GETTERS =====>
 	const getAuthors = computed( () => {	
@@ -25,6 +26,10 @@ export const useAuthorStore = defineStore('authorStore', () => {
 	// for row id
 	const totalItem = computed( () => {
 		return indexId
+	})
+	// for meta data
+	const metaData = computed( () => {
+		return meta.value;
 	})
 	// for error
 	const getErrMsg = computed( () => {
@@ -36,8 +41,6 @@ export const useAuthorStore = defineStore('authorStore', () => {
 		if(page >= 1 && page < total){
 			++page;
 			getAuthor(search,page)
-		} else {
-			return;
 		}
 	}
 	function prev(search, page = currentPage) {
@@ -64,10 +67,12 @@ export const useAuthorStore = defineStore('authorStore', () => {
 			// for row id
 			let from = res.data.meta.from
 			let to = res.data.meta.from + res.data.meta.per_page
-			indexId.splice(0, to);
+			let to_splice = res.data.meta.per_page + 1;
+			indexId.splice(0, to_splice);
 			for(let i = from; i < to ; i++){
 				indexId.push(i);
 			}
+			meta.value = res.data.meta
 		})
 		.catch( err => {
 			console.log(err)
@@ -124,5 +129,5 @@ export const useAuthorStore = defineStore('authorStore', () => {
 		})
 	}
 
-	return { getAuthors, getErrMsg, totalItem, getAuthor, addAuthor, editAuthor, updateAuthor, deleteAuthor, next, prev, first, last }
+	return { getAuthors, getErrMsg, totalItem, metaData, getAuthor, addAuthor, editAuthor, updateAuthor, deleteAuthor, next, prev, first, last }
 })

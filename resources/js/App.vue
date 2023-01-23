@@ -6,7 +6,12 @@
 <script>
 
 export default {
-
+  components: {
+    
+  },
+  setup() {
+    
+  }
 }
 </script>
 

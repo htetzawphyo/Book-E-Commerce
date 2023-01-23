@@ -15,8 +15,13 @@ use Exception;
 
 class BookController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isAdmin');
+    }
+    
     public function index(Request $request) {
-        $query = Book::orderByDesc('created_at');
+        $query = Book::with('author')->orderByDesc('created_at');
 
         if($request->search) {
             $query->where('name', 'like', '%'. $request->search .'%');

@@ -27,7 +27,10 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <label>Name</label>
-                            <input type="text" class="form-control border-dark" placeholder="Name" v-model="name">
+                            <input type="text" class="form-control" placeholder="Name" v-model="name"
+                            :class="{'is-invalid': getErrMsg.name, 'border-danger': getErrMsg.name, 'border-dark': !getErrMsg.name}"
+                            >
+                            <span v-if="getErrMsg.name" class="text-danger fst-italic">{{ getErrMsg.name[0] }}</span>
                         </div>
                         <div class="mb-3">
                             <label>Description</label>
@@ -35,24 +38,36 @@
                         </div>
                         <div class="mb-3">
                             <label>Price</label>
-                            <input type="number" class="form-control border-dark" placeholder="Price" v-model="price">
+                            <input type="number" class="form-control" placeholder="Price" v-model="price"
+                            :class="{'is-invalid': getErrMsg.price, 'border-danger': getErrMsg.price, 'border-dark': !getErrMsg.price}"
+                            >
+                            <span v-if="getErrMsg.price" class="text-danger fst-italic">{{ getErrMsg.price[0] }}</span>
                         </div>
                         <div class="mb-3">
                             <label>Quantity</label>
-                            <input type="number" class="form-control border-dark" placeholder="Quantity" v-model="quantity">
+                            <input type="number" class="form-control" placeholder="Quantity" v-model="quantity"
+                            :class="{'is-invalid': getErrMsg.quantity, 'border-danger': getErrMsg.quantity, 'border-dark': !getErrMsg.quantity}"
+                            >
+                            <span v-if="getErrMsg.quantity" class="text-danger fst-italic">{{ getErrMsg.quantity[0] }}</span>
                         </div>
                         <div class="mb-3">
                             <label>Author</label>
-                            <select class="form-select" name="author_id" @change="handleAutId($event)">
-                                <option value="">Select Author</option>
+                            <select class="form-select" name="author_id" @change="handleAutId($event)"
+                            :class="{'is-invalid': getErrMsg.author_id, 'border-danger': getErrMsg.author_id, 'border-dark': !getErrMsg.author_id}"
+                            >
+                                <option value="" disabled selected>Select Author</option>
                                 <option v-for="author in getAuthors" :key="author.id" :value="author.id"> 
                                     {{ author.name }}
                                 </option>
                             </select>
+                            <span v-if="getErrMsg.quantity" class="text-danger fst-italic">{{ getErrMsg.quantity[0] }}</span>
                         </div>
                         <div class="mb-3">
-                            <label for="formFile" class="form-label border-dark">Image</label>
-                            <input class="form-control border-dark" type="file" v-on:change="handleFileUpload" ref="image" id="image">
+                            <label for="formFile" class="form-label">Image</label>
+                            <input class="form-control" type="file" v-on:change="handleFileUpload" ref="image" id="image"
+                            :class="{'is-invalid': getErrMsg.image, 'border-danger': getErrMsg.image, 'border-dark': !getErrMsg.image}"
+                            >
+                            <span v-if="getErrMsg.image" class="text-danger fst-italic">{{ getErrMsg.image[0] }}</span>
                         </div>
                     </div>
                     <div class="card-footer">
@@ -74,6 +89,7 @@ import DashboardNavBar from '../../components/DashboardNavBar.vue'
 import { ref } from 'vue'
 import { useAuthorStore } from '../../store/AuthorStore';
 import { storeToRefs } from 'pinia';
+import { useBookStore } from '../../store/BookStore';
 
 export default {
     components: {
@@ -86,7 +102,10 @@ export default {
         const quantity = ref('');
         const description = ref('');
         const image = ref(null);
-        const autId = ref(null);
+        const autId = ref(null); 
+
+        const bookStore = useBookStore();
+        const { getErrMsg } = storeToRefs(bookStore);
         const authorStore = useAuthorStore();
 		const { getAuthors } = storeToRefs(authorStore);
         authorStore.getAuthor();
@@ -95,11 +114,23 @@ export default {
             autId.value = event.target.value;
         }
 
-        function handleBook() {
-            console.log(autId.value)
+        function handleFileUpload(event) {
+            image.value = event.target.files[0];
         }
 
-        return { name, price, quantity, description, image, getAuthors, authorStore, handleBook, handleAutId}
+        function handleBook() {
+            let book = {
+                name: name.value,
+                price: price.value,
+                quantity: quantity.value,
+                description: description.value,
+                image: image.value,
+                author_id: autId.value
+            }
+            bookStore.addBook(book);
+        }
+
+        return { name, price, quantity, description, image, getAuthors, authorStore, getErrMsg, handleBook, handleAutId, handleFileUpload }
     }
 
 }

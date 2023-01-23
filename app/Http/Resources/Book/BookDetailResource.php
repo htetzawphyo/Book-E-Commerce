@@ -20,7 +20,8 @@ class BookDetailResource extends JsonResource
             'price' => $this->price,
             'description' => $this->description,
             'quantity' => $this->quantity,
-            'author_id' => $this->author_id,
+            'author_name' => optional($this->author)->name ?? 'Unknown User',
+            'author_id' => optional($this->author)->id ?? 'Unknown User',
             'image' => $this->image ? asset('storage/media/' . $this->image) : null,
         ];
     }

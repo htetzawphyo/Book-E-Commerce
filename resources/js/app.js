@@ -3,6 +3,9 @@ import  App  from "./App.vue";
 import { createPinia } from 'pinia';
 import router from './router';
 import VueProgressBar from "@aacassandra/vue3-progressbar";
+import VueSweetalert2 from 'vue-sweetalert2';
+
+import 'sweetalert2/dist/sweetalert2.min.css';
 import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
 import "@fortawesome/fontawesome-free/scss/brands.scss";
 import "@fortawesome/fontawesome-free/scss/regular.scss";
@@ -26,6 +29,7 @@ const options = {
 
 createApp(App)
 .use(createPinia())
+.use(VueSweetalert2)
 .use(VueProgressBar, options)
 .use(router)
 .mount("#app");

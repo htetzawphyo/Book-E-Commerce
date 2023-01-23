@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Book;
+namespace App\Http\Resources\Auth;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BooksResource extends JsonResource
+class UserAuthResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +17,8 @@ class BooksResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price' => $this->price,
-            'description' => $this->description,
-            'quantity' => $this->quantity,
-            'author_name' => optional($this->author)->name ?? 'Unknown User',
-            'image' => $this->image ? asset('storage/media/' . $this->image) : null,
+            'email' => $this->email,
+            'role' => $this->role->name,
         ];
     }
 }
